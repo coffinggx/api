@@ -1,6 +1,6 @@
 import { uploadOnCloudinary } from "../cloudinary.js";
 import Blog from "../models/blogs.model.js";
-
+import { User } from "../models/user.model.js";
 import upload from '../middlewares/multer.middleware.js';
 
 const uploadBlogs = async (req, res) => {
@@ -12,7 +12,7 @@ const uploadBlogs = async (req, res) => {
         console.log(title, metaTitle, content);
         
         let imageUrl = null;
-        if (req.file) { // Change this to req.file if you're uploading a single file
+        if (req.file) {
             const imageLocalPath = req.file.path;
             if (imageLocalPath) {
                 const uploadedImage = await uploadOnCloudinary(imageLocalPath);
@@ -25,7 +25,7 @@ const uploadBlogs = async (req, res) => {
         const blog = await Blog.create({
             title,
             metaTitle,
-            image: imageUrl, // Changed from imageUrl to image to match the schema
+            image: imageUrl,
             content,
         });
         res.status(201).json(blog);
@@ -35,7 +35,7 @@ const uploadBlogs = async (req, res) => {
 };
 const getBlogs = async (req, res) => {
     try {
-        const blogs = await Blog.find(); // Retrieves all documents in the collection
+        const blogs = await Blog.find(); 
         res.status(200).json(blogs);
     } catch (error) {
         res.status(500).json({ message: error.message });
